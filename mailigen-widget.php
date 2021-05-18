@@ -32,7 +32,8 @@ require_once plugin_dir_path(__FILE__) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY
  * MAILIGEN WIDGET
  * ---------------------
  */
-class Mailigen_Widget extends WP_Widget {
+class Mailigen_Widget extends WP_Widget
+{
 
     /**
      * Options
@@ -42,7 +43,8 @@ class Mailigen_Widget extends WP_Widget {
     /**
      * Constructor
      */
-    function __construct() {
+    function __construct()
+    {
 
         # Get options, if failed return empty array
         $this->options = get_option('mailigen_options', array());
@@ -54,26 +56,27 @@ class Mailigen_Widget extends WP_Widget {
         );
         # Register widget
         parent::__construct(
-                'mailigen_widget', 'Mailigen Signup Form', $params
+            'mailigen_widget', 'Mailigen Signup Form', $params
         );
         # Load external scripts (css)
         wp_enqueue_style(
-                'mailigen_css', plugins_url('css' . DIRECTORY_SEPARATOR . 'mailigen.css', __FILE__)
+            'mailigen_css', plugins_url('css' . DIRECTORY_SEPARATOR . 'mailigen.css', __FILE__)
         );
         # Load external scripts (js)
         wp_enqueue_script(
-                'mailigen_js', plugins_url('js' . DIRECTORY_SEPARATOR . 'mailigen.js', __FILE__), array('jquery')
+            'mailigen_js', plugins_url('js' . DIRECTORY_SEPARATOR . 'mailigen.js', __FILE__), array('jquery')
         );
         # Ajax hook
         add_action(
-                'wp_ajax_mailigen_subscribe', array(&$this, 'subscribe')
+            'wp_ajax_mailigen_subscribe', array(&$this, 'subscribe')
         );
     }
 
     /**
      * Get option by name
      */
-    function getOption($name) {
+    function getOption($name)
+    {
 
         return isset($this->options[$name]) ? $this->options[$name] : false;
     }
@@ -81,7 +84,8 @@ class Mailigen_Widget extends WP_Widget {
     /**
      * Send data and make subscribtion
      */
-    function subscribe() {
+    function subscribe()
+    {
         $response = array(
             'success' => false,
             'message' => null
@@ -104,7 +108,7 @@ class Mailigen_Widget extends WP_Widget {
             $errors = $this->validate($fields);
             $current_widget_options = get_option($this->option_name);
 
-            if($widget_number < 0 || !isset($current_widget_options[$widget_number])){
+            if ($widget_number < 0 || !isset($current_widget_options[$widget_number])) {
                 $widget_number = $this->number;
             }
 
@@ -153,7 +157,8 @@ class Mailigen_Widget extends WP_Widget {
     /**
      * Validate fields
      */
-    function validate($fields = array()) {
+    function validate($fields = array())
+    {
 
         $errors = array();
         $allFieldsParams = $this->getOption('mg_fields');
@@ -207,7 +212,8 @@ class Mailigen_Widget extends WP_Widget {
     /**
      * Update widget settings
      */
-    function update($new_instance, $old_instance) {
+    function update($new_instance, $old_instance)
+    {
 
         $instance = $old_instance;
         $instance['mg_list'] = $new_instance['mg_list'];
@@ -227,9 +233,10 @@ class Mailigen_Widget extends WP_Widget {
     /**
      * Show widget form in backend
      */
-    function form($instance) {
+    function form($instance)
+    {
         $instance = wp_parse_args(
-            (array) $instance, array(
+            (array)$instance, array(
                 'title' => __('Signup For Our Mailing List'),
                 'desc' => __('Enter your email address below.'),
                 'mg_list' => _(''),
@@ -246,7 +253,7 @@ class Mailigen_Widget extends WP_Widget {
             )
         );
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('mg_list'),
             $this->get_field_name('mg_list'),
             esc_attr($instance['mg_list'])
@@ -264,13 +271,13 @@ class Mailigen_Widget extends WP_Widget {
         foreach ($choices as $value => $title) {
             $value = esc_attr($value);
             $title = esc_html($title);
-            $selected = ( $selectedval == $value ) ? ' selected="selected"' : '';
+            $selected = ($selectedval == $value) ? ' selected="selected"' : '';
             echo "<option value='{$value}'{$selected}>{$title}</option>";
         }
         echo "</select></label>";
         echo "</p>";
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('title'),
             $this->get_field_name('title'),
             esc_attr($instance['title'])
@@ -281,7 +288,7 @@ class Mailigen_Widget extends WP_Widget {
         echo "</label>";
         echo "</p>";
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('desc'),
             $this->get_field_name('desc'),
             esc_attr($instance['desc'])
@@ -293,7 +300,7 @@ class Mailigen_Widget extends WP_Widget {
         echo "</p>";
 
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('button_name'),
             $this->get_field_name('button_name'),
             esc_attr($instance['button_name'])
@@ -304,7 +311,7 @@ class Mailigen_Widget extends WP_Widget {
         echo "</label>";
         echo "</p>";
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('success_msg'),
             $this->get_field_name('success_msg'),
             esc_textarea($instance['success_msg'])
@@ -314,7 +321,7 @@ class Mailigen_Widget extends WP_Widget {
         echo "<textarea rows='5' id='{$id}' name='{$name}' class='widefat'>{$value}</textarea>";
         echo "</p>";
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('redirect_url'),
             $this->get_field_name('redirect_url'),
             esc_attr($instance['redirect_url'])
@@ -325,7 +332,7 @@ class Mailigen_Widget extends WP_Widget {
         echo "</label>";
         echo "</p>";
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('double_optin'),
             $this->get_field_name('double_optin'),
             esc_textarea($instance['double_optin'])
@@ -335,7 +342,7 @@ class Mailigen_Widget extends WP_Widget {
         echo "<label for='{$id}'><input id='{$id}' name='{$name}' type='checkbox' value='true' class='' {$checked} /> Double Opt-In</label>";
         echo "</p>";
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('update_existing'),
             $this->get_field_name('update_existing'),
             esc_textarea($instance['update_existing'])
@@ -345,7 +352,7 @@ class Mailigen_Widget extends WP_Widget {
         echo "<label for='{$id}'><input id='{$id}' name='{$name}' type='checkbox' value='true' class='' {$checked} /> Update Existing User</label>";
         echo "</p>";
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('send_welcome'),
             $this->get_field_name('send_welcome'),
             esc_textarea($instance['send_welcome'])
@@ -355,7 +362,7 @@ class Mailigen_Widget extends WP_Widget {
         echo "<label for='{$id}'><input id='{$id}' name='{$name}' type='checkbox' value='true' class='' {$checked} /> Send Welcome Email</label>";
         echo "</p>";
 
-        list( $id, $name, $value ) = array(
+        list($id, $name, $value) = array(
             $this->get_field_id('hide_labels'),
             $this->get_field_name('hide_labels'),
             esc_textarea($instance['hide_labels'])
@@ -369,11 +376,12 @@ class Mailigen_Widget extends WP_Widget {
     /**
      * Show form field
      */
-    function showField($args = array()) {
+    function showField($args = array())
+    {
 
         extract($args);
 
-        $class = ( $class != '' ) ? " {$class}" : null;
+        $class = ($class != '') ? " {$class}" : null;
         switch ($type) {
 
             // text, email, other
@@ -403,7 +411,7 @@ class Mailigen_Widget extends WP_Widget {
 
             // grouping box
             case 'grouping':
-                if(!$hide_labels) {
+                if (!$hide_labels) {
                     echo "<dt><label for='{$name}' class='{$class}'>{$title}{$req}</label></dt>";
                 }
                 foreach ($choices as $value => $title) {
@@ -414,7 +422,7 @@ class Mailigen_Widget extends WP_Widget {
 
             // radio box
             case 'radio':
-                if(!$hide_labels) {
+                if (!$hide_labels) {
                     echo "<dt><label for='{$name}' class='{$class}'>{$title}{$req}</label></dt>";
                 }
                 foreach ($choices as $value => $title) {
@@ -428,7 +436,8 @@ class Mailigen_Widget extends WP_Widget {
     /**
      * Show widget in frontend
      */
-    function widget($args, $instance) {
+    function widget($args, $instance)
+    {
         extract($args, EXTR_SKIP);
         echo $before_widget;
         echo empty($instance['title']) ? ' ' : $before_title . apply_filters('widget_title', $instance['title']) . $after_title;
@@ -449,9 +458,9 @@ class Mailigen_Widget extends WP_Widget {
         echo "<input type='hidden' name='mailigen_widget_form_number' value='" . $this->number . "'>";
         echo '<div class="mg-error-box">&nbsp;</div>';
         echo "<dl class='mailigen-form'>";
-        if( isset($this->options['mg_fields_'.$selected_list])) {
-            $mg_fields = $this->options['mg_fields_'.$selected_list];
-        }else{
+        if (isset($this->options['mg_fields_' . $selected_list])) {
+            $mg_fields = $this->options['mg_fields_' . $selected_list];
+        } else {
             $mg_fields = $this->options['mg_fields'];
         }
         foreach ($mg_fields as $name => $field) {
@@ -476,11 +485,12 @@ class Mailigen_Widget extends WP_Widget {
     /**
      *  Get widget number from post data
      */
-    function getWidgetNumberFromPostData($fields = array()) {
+    function getWidgetNumberFromPostData($fields = array())
+    {
 
-        if(isset($fields['mailigen_widget_form_number'])){
+        if (isset($fields['mailigen_widget_form_number'])) {
             return intval($fields['mailigen_widget_form_number']);
-        }else{
+        } else {
             return -1;
         }
     }
@@ -499,13 +509,14 @@ class Mailigen_Widget extends WP_Widget {
             foreach ($retval as $l)
                 $lists[$l['id']] = __($l['name']);
             return $lists;
-        } return array();
+        }
+        return array();
     }
 
 }
 
 add_action(
-        'widgets_init', create_function('', 'register_widget( "Mailigen_Widget" );')
+    'widgets_init', create_function('', 'register_widget( "Mailigen_Widget" );')
 );
 
 /**
@@ -513,7 +524,8 @@ add_action(
  * MAILIGEN OPTIONS PAGE
  * ---------------------
  */
-class Mailigen_Options {
+class Mailigen_Options
+{
 
     /**
      * Mailigen api
@@ -528,7 +540,8 @@ class Mailigen_Options {
     /**
      * Constructor
      */
-    function __construct() {
+    function __construct()
+    {
 
         add_action('admin_init', array(&$this, 'init'));
         add_action('admin_menu', array(&$this, 'addOptionsPage'));
@@ -538,7 +551,8 @@ class Mailigen_Options {
     /**
      * Options form sections configuration
      */
-    function sectionsConfig() {
+    function sectionsConfig()
+    {
 
         return array(
             'sect_mg_login' => __('Connect to Mailigen'),
@@ -550,7 +564,8 @@ class Mailigen_Options {
     /**
      * Options form fields configuration
      */
-    function fieldsConfig() {
+    function fieldsConfig()
+    {
 
         return array(
             // login section fields
@@ -613,7 +628,8 @@ class Mailigen_Options {
         );
     }
 
-    function fieldsButtonsConfig() {
+    function fieldsButtonsConfig()
+    {
         return array(
             'mg_update' => array(
                 'id' => 'mg-update',
@@ -638,28 +654,29 @@ class Mailigen_Options {
     /**
      * Initialization
      */
-    function init() {
+    function init()
+    {
         // Get options, if failed return empty array
         $this->options = get_option('mailigen_options') ? get_option('mailigen_options') : array();
 
-		if (isset($_POST['mg_login'])) {
-			$apikey = $this->post('mg_login_apikey');
-		} else {
-			$apikey = $this->getOption('mg_apikey');
-		}
+        if (isset($_POST['mg_login'])) {
+            $apikey = $this->post('mg_login_apikey');
+        } else {
+            $apikey = $this->getOption('mg_apikey');
+        }
 
         // Start mailigen API
         $this->api = new MGAPI($apikey);
 
         // Register settings and validate fields
         register_setting(
-                'mailigen_options', 'mailigen_options', array(&$this, 'validate')
+            'mailigen_options', 'mailigen_options', array(&$this, 'validate')
         );
 
         // Add sections to settings
         foreach ($this->sectionsConfig() as $section => $title) {
             add_settings_section(
-                    $section, $title, array(&$this, 'showSection'), $section
+                $section, $title, array(&$this, 'showSection'), $section
             );
         }
 
@@ -678,7 +695,8 @@ class Mailigen_Options {
      * Add dynamic fields to the sections.
      * Fields are read from Mailigen using API
      */
-    function addFieldsToSections() {
+    function addFieldsToSections()
+    {
         // Add fields to sections
         foreach ($this->fieldsConfig() as $id => $field) {
             $field['id'] = isset($field['id']) && $field['id'] ? $field['id'] : $id;
@@ -693,46 +711,48 @@ class Mailigen_Options {
     function addOptionsPage()
     {
         $optionsPage = add_options_page(
-                'Mailigen Widget Settings', 'Mailigen Widget', 'manage_options', 'settings-mailigen', array(&$this, 'showPage')
+            'Mailigen Widget Settings', 'Mailigen Widget', 'manage_options', 'settings-mailigen', array(&$this, 'showPage')
         );
     }
 
     /**
      * Connect and ckeck API key
      */
-    function login() {
+    function login()
+    {
 
-		$apikey = $this->post('mg_login_apikey');
+        $apikey = $this->post('mg_login_apikey');
 
-		$retval = $this->api->getAccountDetails();
+        $retval = $this->api->getAccountDetails();
 
-		// Checking the validity of a API key
+        // Checking the validity of a API key
 
         if (empty($retval)) {
 
             $this->showMessage(
-                    'login_section', 'login_error', __('Invalid API key'), 'error'
+                'login_section', 'login_error', __('Invalid API key'), 'error'
             );
             return false;
 
         } else {
 
-			$this->options['mg_apikey'] = $apikey;
-	
-			update_option(
-					'mailigen_options', $this->options
-			);
-			$this->showMessage(
-					'login_section', 'login_success', __('You are logged in Mailigen...'), 'updated'
-			);
-		}
+            $this->options['mg_apikey'] = $apikey;
+
+            update_option(
+                'mailigen_options', $this->options
+            );
+            $this->showMessage(
+                'login_section', 'login_success', __('You are logged in Mailigen...'), 'updated'
+            );
+        }
 
     }
 
     /**
      * Update options
      */
-    function update() {
+    function update()
+    {
 
         $apikey = $this->post('mg_apikey');
         $listId = $this->post('mg_fields_list');
@@ -752,29 +772,30 @@ class Mailigen_Options {
         }
         $this->options['mg_apikey'] = $apikey;
         $this->options['mg_fields_list'] = $listId;
-        $this->options['mg_fields_list_'.$listId] = $listId;
+        $this->options['mg_fields_list_' . $listId] = $listId;
         $this->options['mg_fields'] = $saved_fields;
-        $this->options['mg_fields_'.$listId] = $saved_fields;
+        $this->options['mg_fields_' . $listId] = $saved_fields;
 
         update_option(
-                'mailigen_options', $this->options
+            'mailigen_options', $this->options
         );
         $this->showMessage(
-                'options_section', 'update_success', __('Settings saved...'), 'updated'
+            'options_section', 'update_success', __('Settings saved...'), 'updated'
         );
     }
 
     /**
      * Get merge vars by list id
      */
-    function reloadFieldsList() {
+    function reloadFieldsList()
+    {
 
         if ($this->post('mg_list')) {
             $mg_list = $this->post('mg_list');
             unset($this->options['mg_fields']);
             $this->options['mg_fields_list'] = $mg_list;
-            if ($this->options['mg_fields_list_'.$mg_list]) {
-                 $this->options['mg_fields'] = $this->options['mg_fields_'.$mg_list];
+            if ($this->options['mg_fields_list_' . $mg_list]) {
+                $this->options['mg_fields'] = $this->options['mg_fields_' . $mg_list];
             }
             update_option('mailigen_options', $this->options);
             $this->addFieldsToSections();
@@ -787,16 +808,18 @@ class Mailigen_Options {
     /**
      * Get option by name
      */
-    function getOption($name) {
+    function getOption($name)
+    {
 
         return isset($this->options[$name]) ?
-                $this->options[$name] : false;
+            $this->options[$name] : false;
     }
 
     /**
      * Get merge lists
      */
-    function getSubscriberLists($lists = array()) {
+    function getSubscriberLists($lists = array())
+    {
 
         if ($this->getOption('mg_apikey')) {
             $retval = $this->api->lists();
@@ -805,26 +828,30 @@ class Mailigen_Options {
             foreach ($retval as $l)
                 $lists[$l['id']] = __($l['name']);
             return $lists;
-        } return array();
+        }
+        return array();
     }
 
     /**
      * Get list merge variables
      */
-    function getListFieldsVars() {
+    function getListFieldsVars()
+    {
 
         if ($lid = $this->getOption('mg_fields_list')) {
             $retval = $this->api->listMergeVars($lid);
             if ($this->api->errorCode)
                 return array();
             return $retval;
-        } return array();
+        }
+        return array();
     }
 
     /**
      * Validate options form fields
      */
-    function validate($field) {
+    function validate($field)
+    {
 
         return $field;
     }
@@ -832,17 +859,18 @@ class Mailigen_Options {
     /**
      * check & prepare post data
      */
-    function post($name) {
+    function post($name)
+    {
 
         $options = 'mailigen_options';
 
         if (isset($_POST[$name])) {
             return is_array($_POST[$name]) ? $_POST[$name] :
-                    esc_attr(stripslashes($_POST[$name]));
+                esc_attr(stripslashes($_POST[$name]));
         }
         if (isset($_POST[$options][$name])) {
             return is_array($_POST[$options][$name]) ? $_POST[$options][$name] :
-                    esc_attr(stripslashes($_POST[$options][$name]));
+                esc_attr(stripslashes($_POST[$options][$name]));
         }
         return false;
     }
@@ -850,7 +878,8 @@ class Mailigen_Options {
     /**
      * Create options form field
      */
-    function createField($args = array()) {
+    function createField($args = array())
+    {
 
         $defaults = array(
             'id' => 'id',
@@ -882,41 +911,43 @@ class Mailigen_Options {
         }
 
         add_settings_field(
-                $id, $title, $callback, $section, $section, $fieldArgs
+            $id, $title, $callback, $section, $section, $fieldArgs
         );
     }
 
     /**
      * Show options form section
      */
-    function showSection() {
+    function showSection()
+    {
         return true;
     }
 
     /**
      * Show options form field
      */
-    function showField($args = array()) {
+    function showField($args = array())
+    {
 
         extract($args);
 
         $options = get_option('mailigen_options');
-        $class = ( $class != '' ) ? " {$class}" : null;
+        $class = ($class != '') ? " {$class}" : null;
 
         switch ($type) {
 
             // text, password
             case 'text':
             case 'password':
-                $readonly = ( $readonly != '' ) ? " readonly='{$readonly}'" : null;
+                $readonly = ($readonly != '') ? " readonly='{$readonly}'" : null;
                 echo "<input id='{$id}' name='mailigen_options[{$name}]' type='{$type}'  value='{$options[$name]}' class='regular-text{$class}'{$readonly}/>";
-                echo ( $desc != '' ) ? "<br /><span class='description'>{$desc}</span>" : "";
+                echo ($desc != '') ? "<br /><span class='description'>{$desc}</span>" : "";
                 break;
 
             // submit button
             case 'submit':
                 echo "<p class='submit'>";
-                $onclick = ( isset($onclick) && $onclick != '' ) ? " {$onclick}" : null;
+                $onclick = (isset($onclick) && $onclick != '') ? " {$onclick}" : null;
                 echo "<input class='button{$class}' type='{$type}' name='{$name}' value='{$value}' onclick='{$onclick}' />";
                 echo "</p>";
                 break;
@@ -924,9 +955,9 @@ class Mailigen_Options {
             case 'buttons':
                 echo "<div class='buttons'>";
                 foreach ($this->fieldsButtonsConfig() as $name => $btnArgs) {
-                    $btnArgs['class'] = ( $btnArgs['class'] != '' ) ? " {$btnArgs['class']}" : null;
-                    $onsubmit = ( isset($btnArgs['onsubmit']) && $btnArgs['onsubmit'] != '' ) ? " {$btnArgs['onsubmit']}" : null;
-                    $onclick = ( isset($btnArgs['onclick']) && $btnArgs['onclick'] != '' ) ? " {$btnArgs['onclick']}" : null;
+                    $btnArgs['class'] = ($btnArgs['class'] != '') ? " {$btnArgs['class']}" : null;
+                    $onsubmit = (isset($btnArgs['onsubmit']) && $btnArgs['onsubmit'] != '') ? " {$btnArgs['onsubmit']}" : null;
+                    $onclick = (isset($btnArgs['onclick']) && $btnArgs['onclick'] != '') ? " {$btnArgs['onclick']}" : null;
                     echo "<input class='button{$btnArgs['class']}' type='{$btnArgs['type']}' name='{$name}' value='{$btnArgs['value']}' onclick='{$onclick}' />&nbsp;";
                 }
                 echo "</div>";
@@ -939,11 +970,11 @@ class Mailigen_Options {
                 foreach ($choices as $value => $title) {
                     $value = esc_attr($value);
                     $title = esc_html($title);
-                    $selected = ( $options[$name] == $value ) ? ' selected="selected"' : '';
+                    $selected = ($options[$name] == $value) ? ' selected="selected"' : '';
                     echo "<option value='{$value}'{$selected}>{$title}</option>";
                 }
                 echo "</select>";
-                echo ( $desc != '' ) ? "<br /><span class='description'>{$desc}</span>" : "";
+                echo ($desc != '') ? "<br /><span class='description'>{$desc}</span>" : "";
                 break;
 
             // merge
@@ -951,7 +982,7 @@ class Mailigen_Options {
                 echo "<fieldset class='merge'>";
                 foreach ($this->getListFieldsVars() as $id => $field) {
                     echo "<label>";
-                    $chechked = ( isset($options['mg_fields'][$field['tag']]) || $field['req'] == 1 ) ? 'checked="checked"' : '';
+                    $chechked = (isset($options['mg_fields'][$field['tag']]) || $field['req'] == 1) ? 'checked="checked"' : '';
                     if ($field['req'] == 1) {
                         echo "<input type='hidden' name='mailigen_options[mg_fields][{$field['tag']}]' value='{$field['name']}'/>";
                         echo "<input type='checkbox' name='{$field['tag']}' value='{$field['name']}' {$chechked} disabled='disabled' onclick='return false' onkeypress='return false'/>&nbsp;&nbsp;";
@@ -981,7 +1012,8 @@ class Mailigen_Options {
 
                         echo "<input type='text' placeholder='enter values from Mailigen' name='mailigen_options[mg_fields][{$field['tag']}_values]' value='{$value}'><br><span class='description'>Comma Separated Values from Mailigen</span>";
                     }
-                } echo "</fieldset>";
+                }
+                echo "</fieldset>";
                 break;
         }
     }
@@ -989,16 +1021,17 @@ class Mailigen_Options {
     /**
      * Show message
      */
-    function showMessage($setting, $code, $message, $type = 'error') {
+    function showMessage($setting, $code, $message, $type = 'error')
+    {
 
         add_settings_error(
-                $setting, $code, $message, $type
+            $setting, $code, $message, $type
         );
         set_transient(
-                'settings_errors', get_settings_errors(), 30
+            'settings_errors', get_settings_errors(), 30
         );
         $goback = add_query_arg(
-                'settings-updated', 'true', wp_get_referer()
+            'settings-updated', 'true', wp_get_referer()
         );
         wp_redirect($goback);
         die();
@@ -1007,7 +1040,8 @@ class Mailigen_Options {
     /**
      * Show options page
      */
-    function showPage() {
+    function showPage()
+    {
 
         settings_fields('mailigen_options');
 
@@ -1052,10 +1086,11 @@ class Mailigen_Options {
     /**
      * Remove mailigen settings
      */
-    function remove() {
+    function remove()
+    {
         delete_option('mailigen_options');
         $goback = add_query_arg(
-                'settings-updated', 'true', wp_get_referer()
+            'settings-updated', 'true', wp_get_referer()
         );
         wp_redirect($goback);
     }
@@ -1065,7 +1100,8 @@ class Mailigen_Options {
 if (is_admin())
     new Mailigen_Options();
 
-function pr($array, $die = false) {
+function pr($array, $die = false)
+{
 
     echo "<pre>";
     print_r($array);
