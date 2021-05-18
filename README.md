@@ -46,6 +46,14 @@ With Mailigen Wordpress Integration you can:
 3. Enter valid Mailigen API key on the plugin admin page ("Settings" >> "Mailigen Widget").
 4. Select a mailing list, preferable input fields.
 
+
+## Changelog
+
+#### 1.3.6
+* Update Mailigen API core.
+* Change login method.
+
+
 ## Authors
 
 [Mailigen](https://mailigen.com)
